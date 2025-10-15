@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panorama Interaction Guide</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Custom Fonts: Cormorant Garamond (for header) and Inter (for body) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* Define Custom Font Families */
+        .font-header {
+            font-family: 'Cormorant Garamond', serif;
+        }
+        .font-body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Glassmorphism Effect - Updated for better contrast against dark background */
+        .glass {
+            background-color: rgba(255, 255, 255, 0.05); /* Even more subtle background */
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        /* --- Animation Keyframes --- */
+
+        /* Panning: Mouse presses down slightly (click) and moves horizontally (drag) */
+        @keyframes mouse-drag {
+            0% { transform: translateX(0) translateY(0); }
+            10% { transform: translateX(0) translateY(1px); } /* Press down */
+            40% { transform: translateX(10px) translateY(1px); } /* Drag right while pressed */
+            70% { transform: translateX(-10px) translateY(1px); } /* Drag left while pressed */
+            90% { transform: translateX(0) translateY(1px); } /* Center while pressed */
+            100% { transform: translateX(0) translateY(0); } /* Release */
+        }
+        
+        .animate-mouse-pan {
+            animation: mouse-drag 2.5s ease-in-out infinite;
+        }
+
+        /* Hotspot Click Animation: Hotspot expanding/pulsing */
+        @keyframes click-pulse {
+            0% { transform: scale(0.9); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(0.9); opacity: 1; }
+        }
+
+        .animate-click-pulse {
+            animation: click-pulse 1.5s ease-out infinite;
+        }
+
+        /* Chevron Animation: Moves right slightly to imply "next" location */
+        @keyframes chevron-bob {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(3px); }
+        }
+
+        .animate-chevron-bob {
+            animation: chevron-bob 1s ease-in-out infinite alternate;
+        }
+
+        /* Full screen overlay and centering */
+        #help-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Help Overlay (Full Screen, semi-transparent black background) -->
+    <div id="help-overlay" class="bg-black/70">
+        <!-- Main Glassmorphism Card (Centered and Responsive) -->
+        <div class="glass p-8 md:p-12 w-11/12 max-w-4xl rounded-3xl text-white font-body">
+
+            <!-- Header (Cormorant Garamond) -->
+            <h1 class="font-header text-6xl md:text-8xl text-center mb-10 tracking-wider text-shadow" style="color: #FFFFFF;">
+                Welcome to the Grand Midori
+            </h1>
+            <p class="text-center text-lg md:text-xl mb-12 opacity-80">
+                A simple guide to navigating this immersive 360° experience.
+            </p>
+
+            <!-- Instructions Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+
+                <!-- 1. Panning Instruction Card -->
+                <div class="p-6 bg-white/10 rounded-xl shadow-lg flex flex-col items-center">
+                    <!-- Animated Mouse Icon: Panning (Monochromatic) -->
+                    <div class="relative w-20 h-20 mb-4 flex justify-center items-center">
+                        <!-- Pulsing background effect -->
+                        <div class="absolute w-full h-full rounded-full bg-white/10 animate-click-pulse"></div>
+
+                        <!-- Animated Mouse SVG -->
+                        <svg class="w-14 h-14 text-white z-10 animate-mouse-pan" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
+                            <!-- Mouse Body -->
+                            <path d="M12 1.5C8.41014 1.5 5.5 4.41014 5.5 8V16C5.5 19.5899 8.41014 22.5 12 22.5C15.5899 22.5 18.5 19.5899 18.5 16V8C18.5 4.41014 15.5899 1.5 12 1.5Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <!-- Scroll Wheel / Main Click Indicator - Stays visible as a press point -->
+                            <path d="M12 2V8" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+
+                    <!-- Title (Now White) -->
+                    <h2 class="text-3xl font-semibold mb-2 text-white">Pan the View</h2>
+                    <p class="text-center opacity-70">
+                        To look around the panorama, simply **click and hold** your mouse button, then **drag** it in any direction (or swipe on a touch device).
+                    </p>
+                </div>
+
+                <!-- 2. Hotspot Instruction Card (Chevron color updated to gray-500) -->
+                <div class="p-6 bg-white/10 rounded-xl shadow-lg flex flex-col items-center">
+                    <!-- Animated Icon: Hotspot Click (Monochromatic) -->
+                    <div class="relative w-20 h-20 mb-4 flex justify-center items-center">
+                        <!-- Pulsing background effect (matches mouse card) -->
+                        <div class="absolute w-full h-full rounded-full bg-white/10 animate-click-pulse"></div>
+
+                        <!-- Hotspot Icon (Inner circle with Chevron) -->
+                        <div class="w-10 h-10 rounded-full bg-white/90 opacity-90 z-10 border-2 border-white/50 flex items-center justify-center">
+                            <!-- Chevron Icon (Lighter Gray on White for contrast, with new animation) -->
+                            <svg class="w-5 h-5 text-gray-500 animate-chevron-bob" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Title (Now White) -->
+                    <h2 class="text-3xl font-semibold mb-2 text-white">Change Location</h2>
+                    <p class="text-center opacity-70">
+                        To navigate to a new viewpoint, look for the subtle **hotspot circles** in the scene and **click** them.
+                    </p>
+                </div>
+
+            </div>
+
+            <!-- Footer Message -->
+            <div class="mt-12 pt-6 border-t border-white/20 text-center opacity-60">
+                <p class="text-sm">
+                    This overlay is fully transparent and dismisses automatically once you start interacting.
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Simple script to demonstrate functionality: clicking the glass card or background hides it.
+        document.addEventListener('DOMContentLoaded', () => {
+            const overlay = document.getElementById('help-overlay');
+
+            // Hides the overlay with a fade-out effect
+            const hideOverlay = () => {
+                 overlay.style.opacity = '0';
+                 setTimeout(() => {
+                     overlay.style.display = 'none';
+                 }, 300);
+            };
+
+            // Event listener for clicks on the overlay
+            overlay.addEventListener('click', (e) => {
+                 // Hide if the user clicks *outside* the glass card (on the dark background)
+                 if (e.target === overlay) {
+                    hideOverlay();
+                 }
+                 // Hide if the user clicks *inside* the glass card (for demonstration)
+                 if(e.target.closest('.glass')) {
+                    hideOverlay();
+                 }
+            });
+        });
+    </script>
+</body>
+</html>
