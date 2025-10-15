@@ -82,8 +82,8 @@
 
     <!-- Help Overlay (Full Screen, semi-transparent black background) -->
     <div id="help-overlay" class="bg-black/70">
-        <!-- Main Glassmorphism Card (Centered and Responsive) -->
-        <div class="glass p-8 md:p-12 w-11/12 max-w-4xl rounded-3xl text-white font-body">
+        <!-- Main Glassmorphism Card (Now Full Screen and Responsive) -->
+        <div class="glass p-8 md:p-12 w-full h-full max-w-full rounded-none text-white font-body">
 
             <!-- Header (Cormorant Garamond) -->
             <h1 class="font-header text-6xl md:text-8xl text-center mb-10 tracking-wider text-shadow" style="color: #FFFFFF;">
@@ -144,10 +144,10 @@
 
             </div>
 
-            <!-- Footer Message -->
+            <!-- Footer Message - Removed automatic dismissal text -->
             <div class="mt-12 pt-6 border-t border-white/20 text-center opacity-60">
                 <p class="text-sm">
-                    This overlay is fully transparent and dismisses automatically once you start interacting.
+                    This help screen is fully transparent and must be dismissed by your application's external logic.
                 </p>
             </div>
 
@@ -155,29 +155,11 @@
     </div>
 
     <script>
-        // Simple script to demonstrate functionality: clicking the glass card or background hides it.
+        // Dismissal logic has been removed as requested. The overlay will remain visible until 
+        // it is explicitly hidden by other application code (e.g., a "Close" button or
+        // external logic monitoring user interaction).
         document.addEventListener('DOMContentLoaded', () => {
-            const overlay = document.getElementById('help-overlay');
-
-            // Hides the overlay with a fade-out effect
-            const hideOverlay = () => {
-                 overlay.style.opacity = '0';
-                 setTimeout(() => {
-                     overlay.style.display = 'none';
-                 }, 300);
-            };
-
-            // Event listener for clicks on the overlay
-            overlay.addEventListener('click', (e) => {
-                 // Hide if the user clicks *outside* the glass card (on the dark background)
-                 if (e.target === overlay) {
-                    hideOverlay();
-                 }
-                 // Hide if the user clicks *inside* the glass card (for demonstration)
-                 if(e.target.closest('.glass')) {
-                    hideOverlay();
-                 }
-            });
+            // No dismissal logic added here, as requested by the user.
         });
     </script>
 </body>
