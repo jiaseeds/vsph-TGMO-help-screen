@@ -19,7 +19,7 @@
 
         /* Glassmorphism Effect - Background color updated to dark green RGB, keeping opacity */
         .glass {
-            background-color: rgba(36, 53, 32, 0.398); /* Dark green, low opacity */
+            background-color: rgba(36, 53, 32, 0.398);  /* Dark green, low opacity */
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -95,9 +95,9 @@
                 <!-- Content Wrapper -->
                 <div class="w-full max-w-4xl py-4 flex flex-col items-center">
 
-                    <!-- Header - Animated (Text changed to "Welcome to The Grand Midori") -->
+                    <!-- Header - Animated (Modified to force a two-line break) -->
                     <h1 class="text-6xl md:text-8xl text-center mb-10 tracking-wider animate-header-float font-medium" style="color: #FFFFFF;">
-                        Welcome to The Grand Midori
+                        Welcome to <br> The Grand Midori
                     </h1>
                     <p class="text-center text-lg md:text-xl mb-12 opacity-80 font-medium">
                         A simple guide to navigating this immersive 360° experience.
@@ -169,7 +169,7 @@
         // Mandatory Firebase Globals (not used in this simple UI, but required to be defined for environment compatibility)
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? initialAuthToken : null;
 
         /**
          * Hides the instruction overlay and reveals the main panorama view.
