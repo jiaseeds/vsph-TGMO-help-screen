@@ -17,9 +17,10 @@
             font-family: 'Inter', sans-serif;
         }
 
-        /* Glassmorphism Effect - Background color updated to dark green RGB, keeping opacity */
+        /* Glassmorphism Effect - Updated with requested color and opacity */
         .glass {
-            background-color: rgba(36, 53, 32, 0.398);  /* Dark green, low opacity */
+            /* This is the transparent layer (39.8% opaque dark green) */
+            background-color: rgba(36, 53, 32, 0.398); 
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -67,14 +68,14 @@
         .animate-chevron-bob { animation: chevron-bob 1s ease-in-out infinite alternate; }
     </style>
 </head>
-<!-- Body background color changed to dark green (bg-green-950) and font updated to Inter -->
-<body class="font-inter m-0 overflow-hidden bg-green-950">
+<!-- Body is transparent to allow the immersive element to fill the frame -->
+<body class="font-inter m-0 overflow-hidden">
 
     <!-- Application Root Container -->
     <div id="app-root" class="full-screen">
 
-        <!-- 1. Main Panorama View (Hidden initially) -->
-        <div id="panorama-view" class="full-screen bg-green-950 hidden flex items-center justify-center text-white p-4">
+        <!-- 1. Main Panorama View (Removed bg-green-950) -->
+        <div id="panorama-view" class="full-screen hidden flex items-center justify-center text-white p-4">
             <!-- This is where your three.js or other 360° viewer would be initialized -->
             <div class="text-center">
                 <h2 class="text-4xl font-bold mb-4">Welcome to the Towers!</h2>
@@ -87,7 +88,7 @@
             </div>
         </div>
 
-        <!-- 2. Help Overlay (Visible initially) -->
+        <!-- 2. Help Overlay (Removed bg-green-950) -->
         <div id="help-overlay" class="full-screen flex items-center justify-center overflow-y-auto">
             <!-- Main Glassmorphism Card (Font updated to Inter) -->
             <div class="glass p-8 md:p-12 w-full h-full max-w-full rounded-none text-white font-inter flex flex-col items-center justify-center overflow-y-auto">
