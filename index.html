@@ -3,168 +3,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panorama Interaction Guide</title>
+    <title>The Grand Midori 360° Experience</title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Load Custom Fonts: Cormorant Garamond (for header) and Barlow (for body) -->
-    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600&family=Cormorant+Garamond:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Load Custom Font: Inter (Updated from Poppins) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Load Three.js (Placeholder for 360 Viewer functionality) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
     <style>
-        body {
-          /* Background image and related properties removed */
+        /* Define Custom Font Family (Updated to Inter) */
+        .font-inter {
+            font-family: 'Inter', sans-serif;
         }
 
-        /* Define Custom Font Families */
-        .font-header {
-            font-family: 'Cormorant Garamond', serif;
-        }
-        .font-body {
-            font-family: 'Barlow', sans-serif;
-        }
-
-        /* Glassmorphism Effect - Updated for lighter transparency */
+        /* Glassmorphism Effect - Background color updated to dark green RGB, keeping opacity */
         .glass {
-            /* Background color increased to 0.15 */
-            background-color: rgba(9, 18, 15, 0.476);  
-            /* Blur reduced to 8px */
-            backdrop-filter: blur(8px); 
-            -webkit-backdrop-filter: blur(8px); 
+            background-color: rgba(36, 53, 32, 0.398); /* Dark green, low opacity */
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-            transition: opacity 0.3s ease-in-out;
         }
 
-        /* --- Animation Keyframes --- */
-        
-        /* New Header Float Animation */
-        @keyframes header-float {
-            0%, 100% { transform: translateY(0); opacity: 1; }
-            50% { transform: translateY(-5px); opacity: 0.95; }
-        }
-        
-        .animate-header-float {
-            animation: header-float 4s ease-in-out infinite alternate;
-        }
-
-        /* Panning: Mouse presses down slightly (click) and moves horizontally (drag) */
-        @keyframes mouse-drag {
-            0% { transform: translateX(0) translateY(0); }
-            10% { transform: translateX(0) translateY(1px); } /* Press down */
-            40% { transform: translateX(10px) translateY(1px); } /* Drag right while pressed */
-            70% { transform: translateX(-10px) translateY(1px); } /* Drag left while pressed */
-            90% { transform: translateX(0) translateY(1px); } /* Center while pressed */
-            100% { transform: translateX(0) translateY(0); } /* Release */
-        }
-        
-        .animate-mouse-pan {
-            animation: mouse-drag 2.5s ease-in-out infinite;
-        }
-
-        /* Hotspot Click Animation: Hotspot expanding/pulsing */
-        @keyframes click-pulse {
-            0% { transform: scale(0.9); opacity: 1; }
-            50% { transform: scale(1.1); opacity: 0.8; }
-            100% { transform: scale(0.9); opacity: 1; }
-        }
-
-        .animate-click-pulse {
-            animation: click-pulse 1.5s ease-out infinite;
-        }
-
-        /* Chevron Animation: Moves right slightly to imply "next" location */
-        @keyframes chevron-bob {
-            0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(3px); }
-        }
-
-        .animate-chevron-bob {
-            animation: chevron-bob 1s ease-in-out infinite alternate;
-        }
-
-        /* Full screen overlay and centering */
-        #help-overlay {
+        /* Full screen positioning for all main elements */
+        .full-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
+            z-index: 1000; /* Ensure overlay is on top initially */
         }
+        
+        /* --- Animation Keyframes (Retained for visual consistency) --- */
+        @keyframes header-float {
+            0%, 100% { transform: translateY(0); opacity: 1; }
+            50% { transform: translateY(-5px); opacity: 0.95; }
+        }
+        .animate-header-float { animation: header-float 4s ease-in-out infinite alternate; }
+        
+        @keyframes mouse-drag {
+            0% { transform: translateX(0) translateY(0); }
+            10% { transform: translateX(0) translateY(1px); }
+            40% { transform: translateX(10px) translateY(1px); }
+            70% { transform: translateX(-10px) translateY(1px); }
+            90% { transform: translateX(0) translateY(1px); }
+            100% { transform: translateX(0) translateY(0); }
+        }
+        .animate-mouse-pan { animation: mouse-drag 2.5s ease-in-out infinite; }
+        
+        @keyframes click-pulse {
+            0% { transform: scale(0.9); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(0.9); opacity: 1; }
+        }
+        .animate-click-pulse { animation: click-pulse 1.5s ease-out infinite; }
+        
+        @keyframes chevron-bob {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(3px); }
+        }
+        .animate-chevron-bob { animation: chevron-bob 1s ease-in-out infinite alternate; }
     </style>
 </head>
-<body>
+<!-- Body background color changed to dark green (bg-green-950) and font updated to Inter -->
+<body class="font-inter m-0 overflow-hidden bg-green-950">
 
-    <!-- Help Overlay (Full Screen, now fully transparent background) -->
-    <div id="help-overlay">
-        <!-- Main Glassmorphism Card (Full Screen, Dynamic Centering, and Scrollable) -->
-        <div class="glass p-8 md:p-12 w-full h-full max-w-full rounded-none text-white font-body flex flex-col items-center justify-center overflow-y-auto">
-            
-            <!-- Content Wrapper: Constrains the width of the text/grid for readability, but allows the whole block to be centered and scroll -->
-            <div class="w-full max-w-4xl py-4">
+    <!-- Application Root Container -->
+    <div id="app-root" class="full-screen">
 
-                <!-- Header (Cormorant Garamond) - Now animated -->
-                <h1 class="font-header text-6xl md:text-8xl text-center mb-10 tracking-wider text-shadow animate-header-float" style="color: #FFFFFF;">
-                    Welcome to the Grand Midori
-                </h1>
-                <p class="text-center text-lg md:text-xl mb-12 opacity-80">
-                    A simple guide to navigating this immersive 360° experience.
+        <!-- 1. Main Panorama View (Hidden initially) -->
+        <div id="panorama-view" class="full-screen bg-green-950 hidden flex items-center justify-center text-white p-4">
+            <!-- This is where your three.js or other 360° viewer would be initialized -->
+            <div class="text-center">
+                <h2 class="text-4xl font-bold mb-4">Welcome to the Towers!</h2>
+                <p class="text-lg opacity-70">
+                    The 360° immersive viewer would start here.
                 </p>
+                <p class="text-sm mt-2 opacity-50">
+                    (Press F5 to restart the application and see the instructions again)
+                </p>
+            </div>
+        </div>
 
-                <!-- Instructions Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <!-- 2. Help Overlay (Visible initially) -->
+        <div id="help-overlay" class="full-screen flex items-center justify-center overflow-y-auto">
+            <!-- Main Glassmorphism Card (Font updated to Inter) -->
+            <div class="glass p-8 md:p-12 w-full h-full max-w-full rounded-none text-white font-inter flex flex-col items-center justify-center overflow-y-auto">
+                
+                <!-- Content Wrapper -->
+                <div class="w-full max-w-4xl py-4 flex flex-col items-center">
 
-                    <!-- 1. Panning Instruction Card -->
-                    <div class="p-6 bg-white/10 rounded-xl shadow-lg flex flex-col items-center">
-                        <!-- Animated Mouse Icon: Panning (Monochromatic) -->
-                        <div class="relative w-20 h-20 mb-4 flex justify-center items-center">
-                            <!-- Pulsing background effect -->
-                            <div class="absolute w-full h-full rounded-full bg-white/10 animate-click-pulse"></div>
+                    <!-- Header - Animated (Text changed to "Welcome to The Grand Midori") -->
+                    <h1 class="text-6xl md:text-8xl text-center mb-10 tracking-wider animate-header-float font-medium" style="color: #FFFFFF;">
+                        Welcome to The Grand Midori
+                    </h1>
+                    <p class="text-center text-lg md:text-xl mb-12 opacity-80 font-medium">
+                        A simple guide to navigating this immersive 360° experience.
+                    </p>
 
-                            <!-- Animated Mouse SVG -->
-                            <svg class="w-14 h-14 text-white z-10 animate-mouse-pan" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
-                                <!-- Mouse Body -->
-                                <path d="M12 1.5C8.41014 1.5 5.5 4.41014 5.5 8V16C5.5 19.5899 8.41014 22.5 12 22.5C15.5899 22.5 18.5 19.5899 18.5 16V8C18.5 4.41014 15.5899 1.5 12 1.5Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <!-- Scroll Wheel / Main Click Indicator - Stays visible as a press point -->
-                                <path d="M12 2V8" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                        </div>
+                    <!-- Instructions Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
 
-                        <!-- Title (Now White) -->
-                        <h2 class="text-3xl font-semibold mb-2 text-white">Pan the View</h2>
-                        <p class="text-center opacity-70">
-                            To look around the panorama, simply click and hold your mouse button, then drag it in any direction (or swipe on a touch device).
-                        </p>
-                    </div>
+                        <!-- 1. Panning Instruction Card -->
+                        <div class="p-6 bg-white/10 rounded-xl shadow-lg flex flex-col items-center">
+                            <!-- Animated Mouse Icon: Panning (Monochromatic) -->
+                            <div class="relative w-20 h-20 mb-4 flex justify-center items-center">
+                                <!-- Pulsing background effect -->
+                                <div class="absolute w-full h-full rounded-full bg-white/10 animate-click-pulse"></div>
 
-                    <!-- 2. Hotspot Instruction Card (Chevron color updated to gray-500) -->
-                    <div class="p-6 bg-white/10 rounded-xl shadow-lg flex flex-col items-center">
-                        <!-- Animated Icon: Hotspot Click (Monochromatic) -->
-                        <div class="relative w-20 h-20 mb-4 flex justify-center items-center">
-                            <!-- Pulsing background effect (matches mouse card) -->
-                            <div class="absolute w-full h-full rounded-full bg-white/10 animate-click-pulse"></div>
-
-                            <!-- Hotspot Icon (Inner circle with Chevron) -->
-                            <div class="w-10 h-10 rounded-full bg-white/90 opacity-90 z-10 border-2 border-white/50 flex items-center justify-center">
-                                <!-- Chevron Icon (Lighter Gray on White for contrast, with new animation) -->
-                                <svg class="w-5 h-5 text-gray-500 animate-chevron-bob" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+                                <!-- Animated Mouse SVG -->
+                                <svg class="w-14 h-14 text-white z-10 animate-mouse-pan" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
+                                    <!-- Mouse Body -->
+                                    <path d="M12 1.5C8.41014 1.5 5.5 4.41014 5.5 8V16C5.5 19.5899 8.41014 22.5 12 22.5C15.5899 22.5 18.5 19.5899 18.5 16V8C18.5 4.41014 15.5899 1.5 12 1.5Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <!-- Scroll Wheel / Main Click Indicator - Stays visible as a press point -->
+                                    <path d="M12 2V8" stroke-width="2" stroke-linecap="round"/>
                                 </svg>
                             </div>
+
+                            <!-- Title -->
+                            <h2 class="text-3xl font-medium mb-2 text-white">Pan the View</h2>
+                            <p class="text-center opacity-70 font-medium">
+                                To look around the panorama, simply click and hold your mouse button, then drag it in any direction (or swipe on a touch device).
+                            </p>
                         </div>
 
-                        <!-- Title (Now White) -->
-                        <h2 class="text-3xl font-semibold mb-2 text-white">Change Location</h2>
-                        <p class="text-center opacity-70">
-                            To navigate to a new viewpoint, look for the subtle hotspot circles in the scene and click them.
-                        </p>
+                        <!-- 2. Hotspot Instruction Card -->
+                        <div class="p-6 bg-white/10 rounded-xl shadow-lg flex flex-col items-center">
+                            <!-- Animated Icon: Hotspot Click (Monochromatic) -->
+                            <div class="relative w-20 h-20 mb-4 flex justify-center items-center">
+                                <!-- Pulsing background effect (matches mouse card) -->
+                                <div class="absolute w-full h-full rounded-full bg-white/10 animate-click-pulse"></div>
+
+                                <!-- Hotspot Icon (Inner circle with Chevron) -->
+                                <div class="w-10 h-10 rounded-full bg-white/90 opacity-90 z-10 border-2 border-white/50 flex items-center justify-center">
+                                    <!-- Chevron Icon (with new animation) -->
+                                    <svg class="w-5 h-5 text-gray-500 animate-chevron-bob" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <!-- Title -->
+                            <h2 class="text-3xl font-medium mb-2 text-white">Explore Views</h2>
+                            <p class="text-center opacity-70 font-medium">
+                                To navigate to a new viewpoint, look for the subtle hotspot circles in the scene and click them.
+                            </p>
+                        </div>
+
                     </div>
 
+                    <!-- Experience Tour Button: Added onclick handler -->
+                    <button class="mt-16 px-10 py-4 text-xl font-medium bg-white text-gray-900 rounded-full shadow-2xl transition-all duration-300 hover:bg-gray-200 hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-white/50" onclick="startTour()">
+                        Experience Tour
+                    </button>
                 </div>
-            </div>
 
+            </div>
         </div>
+
     </div>
+
+    <script type="module">
+        // Mandatory Firebase Globals (not used in this simple UI, but required to be defined for environment compatibility)
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        /**
+         * Hides the instruction overlay and reveals the main panorama view.
+         * In a real application, this is where the 360 viewer (e.g., three.js scene) 
+         * would be initialized and rendered.
+         */
+        window.startTour = function() {
+            const overlay = document.getElementById('help-overlay');
+            const panoramaView = document.getElementById('panorama-view');
+
+            if (overlay && panoramaView) {
+                // 1. Hide the overlay using a fade-out effect for smoothness
+                overlay.style.opacity = '0';
+                
+                // 2. Wait for the transition and then hide it completely and show the view
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
+                    // Remove z-index to allow interaction with anything behind it (if applicable)
+                    overlay.style.zIndex = '0'; 
+                    
+                    // Show the main panorama view
+                    panoramaView.classList.remove('hidden');
+                    panoramaView.style.zIndex = '1';
+                    
+                    // Optional: Initialize your three.js/panorama scene here
+                    // e.g. initializePanorama(panoramaView);
+
+                }, 500); // Match the transition duration if one were applied (using a default of 500ms for safety)
+            }
+        };
+
+        // Add fade transition to overlay for smooth dismissal
+        document.addEventListener('DOMContentLoaded', () => {
+            const overlay = document.getElementById('help-overlay');
+            if (overlay) {
+                overlay.style.transition = 'opacity 0.5s ease-in-out';
+            }
+        });
+
+    </script>
 </body>
 </html>
